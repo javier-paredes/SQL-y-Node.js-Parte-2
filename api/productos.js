@@ -9,8 +9,8 @@ class Productos {
 
     crearTabla() {
         knex.schema.createTable('productos', table => {
-            table.string('nombre');
-            table.integer('precio');
+            table.string('title');
+            table.integer('price');
             table.string('thumbnail');
             table.integer('id');
         }).then(() => {
@@ -18,37 +18,29 @@ class Productos {
         }).catch(error => {
             console.log('Error:', error);
             throw error;
-        }).finally(() => {
-            console.log('Cerrando conexión...');
-            knex.destroy();
-        });
+        })
     }
 
     listar() {
         knex.from('productos').select('*')
             .then(rows => {
-                for (row of rows) {
-                    console.log(`${row['nombre']} ${row['precio']} ${row['thumbnail']}`);
-                }
+                // for (row of rows) {
+                //     console.log(`${row['title']} ${row['price']} ${row['thumbnail']} ${row['id']}`);
+                // }
+                console.log(rows)
             }).catch(error => {
                 console.log('Error:', error);
-            }).finally(() => {
-                console.log('Cerrando conexión...');
-                knex.destroy();
-            });
+            })
         return this.producto;
     }
 
     async guardar(productos) {
         try{
             await knex('productos').insert(productos)
-            console.log('Producto agregado a la tabla')
         }        
         catch (error) {
             console.log(error);
-        } finally {
-            knex.destroy();
-        }
+        } 
         
         this.producto.push(productos);
     }
@@ -60,23 +52,18 @@ class Productos {
                 console.log('Producto actualizado')
             }).catch(error => {
                 console.log('Error:', error);
-            }).finally(() => {
-                console.log('Cerrando conexión...');
-                knex.destroy();
-            });
+            })
     }
 
     borrar(idProducto) {
-        let productoBorrado = this.producto.splice(idProducto, 1);
-        knex.from('productos').where('id', '==', `${idProducto}`).del()
+        console.log(idProducto)
+        knex.from('productos').where('id', '=', `${idProducto}`).del()
             .then(() => {
                 console.log('Producto eliminado')
             }).catch(error => {
                 console.log('Error:', error);
-            }).finally(() => {
-                console.log('Cerrando conexión...');
-                knex.destroy();
-            });
+            })
+        let productoBorrado = this.producto.splice(idProducto, 1);        
         return productoBorrado;
     }
 }

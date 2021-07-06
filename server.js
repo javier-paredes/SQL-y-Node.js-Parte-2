@@ -34,8 +34,9 @@ app.use('/api', routerApi)
 
 // LISTAR PRODUCTOS
 routerApi.get('/productos/listar', (req, res) => {
+    productos.listar();
     if (productos.producto.length > 0) {
-        res.render('vista', { hayProductos: true, productos: productos.producto })
+        res.render('vista', { hayProductos: true, productos: productos.listar() })
     } else if (productos.producto.length == 0) {
         res.render('vista', { hayProductos: false })
     }
